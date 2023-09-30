@@ -6,9 +6,10 @@ import random
 
 class Game:
     # Randomly select word when initialized
-    def __init__(self, word_list):
+    def __init__(self, word_list, game_history):
         # Secret word should never change
         self.__secret_word = tuple(random.choice(word_list))
+        print(self.__secret_word)
         self.guesses = []
         self.ongoing = True
 
@@ -28,8 +29,8 @@ class Game:
     # Generate user feedback for  guess
     def evaluate(self, guess):
         # A perfect match is a correct letter in the correct spot
-        perfect_match_count = 0
         # A partial match is a correct letter in the wrong spot
+        perfect_match_count = 0
         partial_match_count = 0
 
         temp_secret = list(self.__secret_word)
@@ -49,15 +50,15 @@ class Game:
                 partial_match_count += 1
         # Return match feedback as dictionary
         feedback={'perfect': perfect_match_count, 'partial':partial_match_count}
+        if perfect_match_count == 4:
+             self.ongoing = False
         return(feedback)
 
     # Return the current guess count
     def current_guess(self):
         return len(self.guesses) + 1
     
-    # Hash of class is just hash of the secret word
-    def __hash__(self):
-        return hash(self.__secret_word)
+
     
     # This function is for testing only and will be removed in prod
     def print_secret_word(self):

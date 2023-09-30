@@ -3,7 +3,7 @@ to include reading in a list of all possible words from a file and prompting
 user for input'''
 
 import os
-import game
+from game import Game
 
 INPUT_FILENAME = 'word_list.txt'
 
@@ -19,14 +19,31 @@ except:
     print('Error loading input file')
     exit()
 
+game_history = dict()
+
+print('                     __   __   __        ___ ')
+print(' |\/| | |\ | | |  | /  \ |__) |  \ |    |__  ')  
+print(' |  | | | \| | |/\| \__/ |  \ |__/ |___ |___ ')  
+print('                                             ')  
+                                            
+                                             
+
+
 def print_feedback(data):
     print(data)
 
-# Initialize game object
-game = game.Game(word_list)
-# game.print_secret_word()
-while(game.ongoing):
-    guess = input(f'[Guess #{game.current_guess()}] Enter a four letter word: ')
-    if game.validate(guess, word_list):
-        feedback = game.evaluate(guess)
-        print_feedback(feedback)
+def play_game():
+    # Initialize game object
+    game = Game(word_list, game_history)
+    # game.print_secret_word()
+    while(game.ongoing):
+        guess = input(f'[Guess #{game.current_guess()}] Enter a four letter word: ')
+        if game.validate(guess, word_list):
+            feedback = game.evaluate(guess)
+            print_feedback(feedback)
+    game_history[hash(game)] = 'Done'
+
+play_game()
+play_game()
+play_game()
+print(game_history)
