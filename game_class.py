@@ -7,10 +7,12 @@ import random
 class Game:
     # Randomly select word when initialized
     def __init__(self, word_list):
+        # Secret word should never change
         self.__secret_word = tuple(random.choice(word_list))
         self.guesses = []
         self.ongoing = True
 
+    # Validate that the guess is a real four-letter word
     def validate(self, guess, word_list):
         if not guess.isalpha():
             print('--> Error: Guesses may only contain letters. Please try '
@@ -21,13 +23,32 @@ class Game:
         elif guess not in word_list:
             print('--> Error: Word not recognized. Please try another word.')
         else:
-            pass
+            return True
+        
+    # Generate user feedback
+    def evaluate(self, guess):
+        # A perfect match is a correct letter in the correct spot
+        perfect_match_count = 0
+        # A partial match is a correct letter in the wrong spot
+        partial_match_count = 0
 
+        temp_secret = list(self.__secret_word)
+        temp_guess = list(guess)
+        # Find all perfect matches and remove
+        for i in range(len(self.__secret_word)):
+            if self.__secret_word[i] == guess[i]:
+                temp_secret.pop(i)
+                temp_guess.pop(i)
+                perfect_match_count += 1
+        
+
+    # Return the current guess count
     def current_guess(self):
         return len(self.guesses) + 1
-    # This function is for testing only and will be removed in prod
-    def print_secret_word(self):
-        print(self.__secret_word)
 
     def __hash__(self):
         return hash(self.__secret_word)
+    
+    # This function is for testing only and will be removed in prod
+    def print_secret_word(self):
+        print(self.__secret_word)

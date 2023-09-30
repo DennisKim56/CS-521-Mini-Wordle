@@ -17,11 +17,17 @@ text_file = open(file_name, 'r')
 input_file_data = text_file.read()
 text_file.close()
 
-word_list = input_file_data.splitlines()
+word_list = set(input_file_data.splitlines())
+
+def print_feedback(data):
+    print(data)
+
+
 
 # Initialize game object
 game = game_class.Game(word_list)
 game.print_secret_word()
 while(game.ongoing):
     guess = input(f'[Guess #{game.current_guess()}] Enter a four letter word: ')
-    game.validate(guess, word_list)
+    if game.validate(guess, word_list):
+        feedback = game.evaluate(guess)
