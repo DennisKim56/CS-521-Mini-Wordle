@@ -47,13 +47,15 @@ class Game:
             if temp_guess[j] in temp_secret:
                 temp_secret.remove(temp_guess[j])
                 partial_match_count += 1
-        # Return match feedback
-        return({'perfect': perfect_match_count, 'partial':partial_match_count})
+        # Return match feedback as dictionary
+        feedback={'perfect': perfect_match_count, 'partial':partial_match_count}
+        return(feedback)
 
     # Return the current guess count
     def current_guess(self):
         return len(self.guesses) + 1
-
+    
+    # Hash of class is just hash of the secret word
     def __hash__(self):
         return hash(self.__secret_word)
     
