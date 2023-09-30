@@ -6,5 +6,8 @@ import random
 
 class Game:
     def __init__(self, word_list):
-        self.__secret_word = ''
-        print(word_list)
+        self.__secret_word = random.choice(word_list)
+    
+    # This function is for testing only and will be removed in prod
+    def print_secret_word(self):
+        print(self.__secret_word)

@@ -20,3 +20,4 @@ text_file.close()
 word_list = input_file_data.splitlines()
 
 game = game_class.Game(word_list)
+game.print_secret_word()
