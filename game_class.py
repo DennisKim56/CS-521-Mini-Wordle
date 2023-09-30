@@ -25,7 +25,7 @@ class Game:
         else:
             return True
         
-    # Generate user feedback
+    # Generate user feedback for  guess
     def evaluate(self, guess):
         # A perfect match is a correct letter in the correct spot
         perfect_match_count = 0
@@ -34,13 +34,21 @@ class Game:
 
         temp_secret = list(self.__secret_word)
         temp_guess = list(guess)
-        # Find all perfect matches and remove
-        for i in range(len(self.__secret_word)):
+        # Find all perfect matches and remove from the temp vars
+        # Note: Comparison must be done in reverse from last to first so that
+        # the pop() function doesn't mess up indices for future comparisons
+        for i in range(len(self.__secret_word)-1,-1,-1):
             if self.__secret_word[i] == guess[i]:
                 temp_secret.pop(i)
                 temp_guess.pop(i)
                 perfect_match_count += 1
-        
+        # Find all partial matches and remove from the temp vars
+        for j in range(len(temp_secret)):
+            if temp_guess[j] in temp_secret:
+                temp_secret.remove(temp_guess[j])
+                partial_match_count += 1
+        # Return match feedback
+        return({'perfect': perfect_match_count, 'partial':partial_match_count})
 
     # Return the current guess count
     def current_guess(self):
