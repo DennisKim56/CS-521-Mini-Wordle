@@ -7,7 +7,11 @@ import random
 class Game:
     def __init__(self, word_list):
         self.__secret_word = random.choice(word_list)
-    
+        self.ongoing = True
+
+    def validate(self, guess, word_list):
+        if guess not in word_list:
+            print('Error')
     # This function is for testing only and will be removed in prod
     def print_secret_word(self):
         print(self.__secret_word)

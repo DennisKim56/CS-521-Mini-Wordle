@@ -1,6 +1,6 @@
 import os
 import enchant
-from itertools import permutations
+from itertools import product
 
 OUTPUT_FILE = 'word_list.txt'
 
@@ -11,7 +11,7 @@ file_name = os.path.join(dir_name, OUTPUT_FILE)
 d=enchant.Dict("en_US")
 word_set = list()
 letter_list = list('abcdefghijklmnopqrstuvwxyz')
-word_list = list(permutations(letter_list,4))
+word_list = list(product(letter_list,repeat=4))
 for word in word_list:
     word_string = "".join(word)
     if d.check(word_string):
