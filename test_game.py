@@ -7,7 +7,7 @@ from game import Game
 class TestGame(unittest.TestCase):
     
     def setUp(self):
-        self.word_list = ['test','fake','copy']
+        self.word_list = ['test']
         self.test_game = Game(self.word_list)
         self.test_game.__secret_word = 'test'
 
