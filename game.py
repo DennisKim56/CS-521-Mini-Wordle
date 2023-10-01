@@ -8,23 +8,43 @@ class Game:
     GUESS_LIMIT = 10
 
     # Randomly select word when initialized
-    def __init__(self, word_list, game_history):
+    def __init__(self, word_list):
         self.__secret_word = tuple(random.choice(word_list))
+        # *************************** REMOVE *****************************
         print(self.__secret_word)
-        self.guesses = []
+        # *************************** REMOVE *****************************
+        self.guesses = set()
         self.won_game = False
 
-    # Validate that the guess is a valid four-letter word
+    # Magic class methods
+    def __bool__(self):
+        return self.won_game
+    def __str__(self):
+        status_str = 'Default'
+        if self.is_ongoing():
+            status_str = 'Game is still ongoing'
+        elif self.won_game:
+            status_str = f'Solved in {len(self.guesses)} moves'
+        elif self.guesses >= Game.GUESS_LIMIT:
+            status_str = f'Unable to solve in {len(self.guesses)} moves'
+        return status_str
+
+    # Validate that the guess is a valid four-letter word that hasn't already
+    # been guessed
     def validate(self, guess, word_list):
         if not guess.isalpha():
             print('--> Error: Guesses may only contain letters. Please try '
                   +'another guess.')
         elif len(guess) != 4:
-            print('--> Error: You may only guess 4-letter words. '+
-                  'Please try another word.') 
+            print('--> Error: You may only guess 4-letter words. '
+                  +'Please try another word.')
+        elif guess in self.guesses:
+            print('--> Error: You have already guessed this word. Please try '
+                  +'another word.')
         elif guess not in word_list:
             print('--> Error: Word not recognized. Please try another word.')
         else:
+            self.guesses.add(guess)
             return True
         
     # Generate user feedback for guess
@@ -49,7 +69,6 @@ class Game:
                 temp_secret.remove(temp_guess[j])
                 partial_match_count += 1
         
-
         if perfect_match_count == 4:
             self.won_game = True
             self.__print_win()
@@ -64,25 +83,36 @@ class Game:
             return False
         return True
     
+
     # Return the current guess count
     def current_guess(self):
         return len(self.guesses) + 1
-    
+
     def __print_win(self):
         print(' ')
-        print('                    ██╗   ██╗ ██████╗ ██╗   ██╗    ██╗    ██╗██'+
-              '╗███╗   ██╗    ██╗██╗██╗                    ')
-        print('▄ ██╗▄ ██╗▄ ██╗▄    ╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║    ██║██'+
-              '║████╗  ██║    ██║██║██║    ▄ ██╗▄ ██╗▄ ██╗▄')
-        print(' ████╗████╗████╗     ╚████╔╝ ██║   ██║██║   ██║    ██║ █╗ ██║██'+
-              '║██╔██╗ ██║    ██║██║██║     ████╗████╗████╗')
-        print('▀╚██╔▀╚██╔▀╚██╔▀      ╚██╔╝  ██║   ██║██║   ██║    ██║███╗██║██'+
-              '║██║╚██╗██║    ╚═╝╚═╝╚═╝    ▀╚██╔▀╚██╔▀╚██╔▀')
-        print('  ╚═╝  ╚═╝  ╚═╝        ██║   ╚██████╔╝╚██████╔╝    ╚███╔███╔╝██'+
-              '║██║ ╚████║    ██╗██╗██╗      ╚═╝  ╚═╝  ╚═╝ ')
-        print('                       ╚═╝    ╚═════╝  ╚═════╝      ╚══╝╚══╝ ╚═'+
-              '╝╚═╝  ╚═══╝    ╚═╝╚═╝╚═╝                    ')
+        print('██╗   ██╗ ██████╗ ██╗   ██╗    ██╗    ██╗██╗███╗   ██╗    ██╗')
+        print('╚██╗ ██╔╝██╔═══██╗██║   ██║    ██║    ██║██║████╗  ██║    ██║')
+        print(' ╚████╔╝ ██║   ██║██║   ██║    ██║ █╗ ██║██║██╔██╗ ██║    ██║')
+        print('  ╚██╔╝  ██║   ██║██║   ██║    ██║███╗██║██║██║╚██╗██║    ╚═╝')
+        print('   ██║   ╚██████╔╝╚██████╔╝    ╚███╔███╔╝██║██║ ╚████║    ██╗')
+        print('   ╚═╝    ╚═════╝  ╚═════╝      ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝    ╚═╝')
+        print(' ') 
+
+    def __print_lose(self):
         print(' ')
+        print(' ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ██╗   ██╗██████'
+              +'█╗██████╗ ')
+        print('██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔═══██╗██║   ██║██╔═══'
+              +'═╝██╔══██╗')
+        print('██║  ███╗███████║██╔████╔██║█████╗      ██║   ██║██║   ██║█████╗'
+              +'  ██████╔╝')
+        print('██║   ██║██╔══██║██║╚██╔╝██║██╔══╝      ██║   ██║╚██╗ ██╔╝██╔══╝'
+              +'  ██╔══██╗')
+        print('╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ╚██████╔╝ ╚████╔╝ ██████'
+              +'█╗██║  ██║')
+        print(' ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚═════'
+              +'═╝╚═╝  ╚═╝')
+        print(' ') 
 
 
 
@@ -90,5 +120,3 @@ class Game:
 
 
 
-                
-                                                                                                           

@@ -29,26 +29,53 @@ print('Welcome to Miniwordle!')
 game_history = dict()
 exit_game = False
 
+# Based on feedback dictionary, format feedback response for user
 def print_feedback(data):
-    print(data)
+    feedback_str = '           '
+    if data['perfect'] + data['partial'] == 0:
+        feedback_str += 'None of those letters are in the secret word.'
+    else:
+        if data['perfect'] == 1:
+            feedback_str += f'{data["perfect"]} letter is in the right spot. '
+        elif data['perfect'] != 0:
+            feedback_str += f'{data["perfect"]} letters are in the right spot. '
+        if data['partial'] == 1:
+            feedback_str += f'{data["partial"]} letter is in the wrong spot. '
+        elif data['partial'] != 0:
+            feedback_str += (f'{data["partial"]} letters are in the wrong '
+                             +'spots. ')
+        if data['partial'] + data['perfect'] == 3:
+            feedback_str += '1 letter does not exist in the secret word.'
+        elif data['partial'] + data['perfect'] < 3:
+            feedback_str += (f'{4 - data["partial"] - data["perfect"]} letters '
+                             +'are in the wrong spots.')
+    print(feedback_str)
+
+# Display game history to user
+def show_game_history():
+    os.system('cls')
 
 def play_game():
+    os.system('cls')
     # Initialize game object
     game = Game(word_list, game_history)
     # game.print_secret_word()
-    while(game.is_ongoing()):
+    while game.is_ongoing():
         guess = input(f'[Guess #{game.current_guess()}] Enter a four letter word: ')
         if game.validate(guess, word_list):
             feedback = game.evaluate(guess)
-            print_feedback(feedback)
-    game_history[hash(game)] = 'Done'
+            if game.is_ongoing():
+                print_feedback(feedback)
+            else:
+                index = len(game_history.keys) + 1
+                game_history[index] = {'word':'', 'result':'', 'summary':''}
 
 while not exit_game:
     print('1. Play a new game')
     print('2. See scores')
     print('3. Help')
     print('4. Exit')
-    user_input = input('--> Please select an option: ')
+    user_input = input('---> Please select an option: ')
     if user_input == '1':
         play_game()
     elif user_input == '2':
@@ -58,5 +85,5 @@ while not exit_game:
     elif user_input == '4':
         exit_game = True
     else:
-        print('Input not recognized. Enter "1" to play a new game, "2" to see '+
-              'high scores, or "3" to exit.')
+        print('Input not recognized. Enter "1" to play a new game or "4" to '
+              +'exit.')
