@@ -24,8 +24,11 @@ class Game:
         if self.is_ongoing():
             status_str = 'Game is still ongoing'
         elif self.won_game:
-            status_str = f'Solved in {len(self.guesses)} moves'
-        elif self.guesses >= Game.GUESS_LIMIT:
+            if len(self.guesses) == 1:
+                status_str = f'Solved in {len(self.guesses)} move'
+            else:
+                status_str = f'Solved in {len(self.guesses)} moves'
+        elif len(self.guesses) >= Game.GUESS_LIMIT:
             status_str = f'Unable to solve in {len(self.guesses)} moves'
         return status_str
 
@@ -68,21 +71,28 @@ class Game:
             if temp_guess[j] in temp_secret:
                 temp_secret.remove(temp_guess[j])
                 partial_match_count += 1
-        
+        # If the word has been solved, notify user and set 'won_game' to True
         if perfect_match_count == 4:
             self.won_game = True
             self.__print_win()
+            return self.__secret_word
+        
+        # If the guess limit has been reached, reveal word and let user know
+        # they lost
+        if len(self.guesses) >= Game.GUESS_LIMIT:
+            self.__print_lose()
+            print(f'The secret word was {self.__secret_word}')
+            return self.__secret_word
         
         # Return match feedback as dictionary
         feedback={'perfect': perfect_match_count, 'partial':partial_match_count}
-        return(feedback)
+        return feedback
     
     # Check if game is still ongoing
     def is_ongoing(self):
         if self.won_game or len(self.guesses) >= Game.GUESS_LIMIT:
             return False
         return True
-    
 
     # Return the current guess count
     def current_guess(self):

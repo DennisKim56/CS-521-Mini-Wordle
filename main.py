@@ -54,11 +54,35 @@ def print_feedback(data):
 # Display game history to user
 def show_game_history():
     os.system('cls')
+    print(' ')
+    print('███████╗ ██████╗ ██████╗ ██████╗ ███████╗███████╗')
+    print('██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝██╔════╝')
+    print('███████╗██║     ██║   ██║██████╔╝█████╗  ███████╗')
+    print('╚════██║██║     ██║   ██║██╔══██╗██╔══╝  ╚════██║')
+    print('███████║╚██████╗╚██████╔╝██║  ██║███████╗███████║')
+    print('╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝')
+    print(' ')
+    print(' #    Word    Result     Summary')
+    print(' -    ----    ------     ------------------------------------------')
+    for key, value in game_history.items():
+        word = str(value['word'])
+        result = ' Win ' if value['win'] else ' Lost '
+        summary = value['summary']
+        print(f' {key}    {word}    {result}    {summary}')
 
+# Provide information on how to play the game
+def show_help():
+    os.system('cls')
+
+
+
+
+                                              
+# Play 1 round of the game
 def play_game():
     os.system('cls')
     # Initialize game object
-    game = Game(word_list, game_history)
+    game = Game(word_list)
     # game.print_secret_word()
     while game.is_ongoing():
         guess = input(f'[Guess #{game.current_guess()}] Enter a four letter word: ')
@@ -67,8 +91,10 @@ def play_game():
             if game.is_ongoing():
                 print_feedback(feedback)
             else:
-                index = len(game_history.keys) + 1
-                game_history[index] = {'word':'', 'result':'', 'summary':''}
+                index = len(list(game_history.keys())) + 1
+                game_history[index] = {'word':feedback, 
+                                       'win':bool(game), 
+                                       'summary':str(game)}
 
 while not exit_game:
     print('1. Play a new game')
@@ -79,11 +105,12 @@ while not exit_game:
     if user_input == '1':
         play_game()
     elif user_input == '2':
-        pass
+        show_game_history()
     elif user_input == '3':
-        pass
+        show_help()
     elif user_input == '4':
         exit_game = True
     else:
         print('Input not recognized. Enter "1" to play a new game or "4" to '
               +'exit.')
+        
