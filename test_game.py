@@ -35,26 +35,30 @@ class TestGame(unittest.TestCase):
 
     def test_evaluate(self):
         # The secret word is set to 'test'
-        # Verify evaluating a correct word returns {'perfect':4,'partial':0}
+        # Verify evaluating a correct word returns 
+        # {'perfect':4,'partial':0}
         test_case1 = self.test_game.evaluate('test')
-        self.assertTrue(test_case1 == {'perfect':4,'partial':0})
+        self.assertTrue(test_case1 == 'test')
 
         # Verify evaluating a word with zero correct letters returns
         # {'perfect':0, 'partial': 0}
-        test_case2 = self.test_game.evaluate('dogs')
+        test_case2 = self.test_game.evaluate('copy')
         self.assertTrue(test_case2 == {'perfect':0,'partial':0})
 
-        # Verify evaluating a correct word returns {'perfect':4,'partial':0}
-        test_case3 = self.test_game.evaluate('test')
-        self.assertTrue(test_case3 == {'perfect':4,'partial':0})
+        # Verify evaluating a word with 1 partially correct letter returns
+        # {'perfect':0, 'partial': 1}
+        test_case3 = self.test_game.evaluate('dogs')
+        self.assertTrue(test_case3 == {'perfect':0,'partial':1})
 
-        # Verify evaluating a correct word returns {'perfect':4,'partial':0}
-        test_case4 = self.test_game.evaluate('test')
-        self.assertTrue(test_case4 == {'perfect':4,'partial':0})
+        # Verify evaluating a word with 1 perfectly correct letter returns
+        # {'perfect':1, 'partial': 0}
+        test_case4 = self.test_game.evaluate('toga')
+        self.assertTrue(test_case4 == {'perfect':1,'partial':0})
 
-        # Verify evaluating a correct word returns {'perfect':4,'partial':0}
-        test_case5 = self.test_game.evaluate('test')
-        self.assertTrue(test_case5 == {'perfect':4,'partial':0})
+        # Verify evaluating a word with 1 partially correct letter and 1 
+        # perfectly correct letter returns {'perfect':1, 'partial': 1}
+        test_case5 = self.test_game.evaluate('take')
+        self.assertTrue(test_case5 == {'perfect':1,'partial':1})
 
 if __name__ == '__main__':
     unittest.main()
