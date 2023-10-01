@@ -10,11 +10,9 @@ class Game:
     # Randomly select word when initialized
     def __init__(self, word_list):
         self.__secret_word = tuple(random.choice(word_list))
-        # *************************** REMOVE *****************************
-        print(self.__secret_word)
-        # *************************** REMOVE *****************************
         self.guesses = set()
         self.won_game = False
+        self.guessed_letters = set()
 
     # Magic class methods
     def __bool__(self):
@@ -35,23 +33,30 @@ class Game:
     # Validate that the guess is a valid four-letter word that hasn't already
     # been guessed
     def validate(self, guess, word_list):
-        if not guess.isalpha():
+        if guess == '?':
+            return True
+        elif not guess.isalpha():
             print('--> Error: Guesses may only contain letters. Please try '
                   +'another guess.')
         elif len(guess) != 4:
             print('--> Error: You may only guess 4-letter words. '
                   +'Please try another word.')
-        elif guess in self.guesses:
+        elif guess.lower() in self.guesses:
             print('--> Error: You have already guessed this word. Please try '
                   +'another word.')
-        elif guess not in word_list:
+        elif guess.lower() not in word_list:
             print('--> Error: Word not recognized. Please try another word.')
         else:
             self.guesses.add(guess)
+            self.guessed_letters.update(set(guess))
             return True
         
     # Generate user feedback for guess
     def evaluate(self, guess):
+        if guess == '?':
+            letter_list = list(self.guessed_letters)
+            letter_list.sort()
+            return ' '.join(letter_list).upper()
         # Perfect = a correct letter in the correct spot
         # Partial = a correct letter in the wrong spot
         perfect_match_count = 0

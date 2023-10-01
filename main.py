@@ -31,24 +31,30 @@ exit_game = False
 
 # Based on feedback dictionary, format feedback response for user
 def print_feedback(data):
-    feedback_str = '           '
-    if data['perfect'] + data['partial'] == 0:
-        feedback_str += 'None of those letters are in the secret word.'
+    if type(data) is str:
+        feedback_str = data
     else:
-        if data['perfect'] == 1:
-            feedback_str += f'{data["perfect"]} letter is in the right spot. '
-        elif data['perfect'] != 0:
-            feedback_str += f'{data["perfect"]} letters are in the right spot. '
-        if data['partial'] == 1:
-            feedback_str += f'{data["partial"]} letter is in the wrong spot. '
-        elif data['partial'] != 0:
-            feedback_str += (f'{data["partial"]} letters are in the wrong '
-                             +'spots. ')
-        if data['partial'] + data['perfect'] == 3:
-            feedback_str += '1 letter does not exist in the secret word.'
-        elif data['partial'] + data['perfect'] < 3:
-            feedback_str += (f'{4 - data["partial"] - data["perfect"]} letters '
-                             +'are in the wrong spots.')
+        feedback_str = '           '
+        if data['perfect'] + data['partial'] == 0:
+            feedback_str += 'None of those letters are in the secret word.'
+        else:
+            if data['perfect'] == 1:
+                feedback_str += (f'{data["perfect"]} letter is in the right '
+                                 +'spot. ')
+            elif data['perfect'] != 0:
+                feedback_str += (f'{data["perfect"]} letters are in the right '
+                                 +'spot. ')
+            if data['partial'] == 1:
+                feedback_str += (f'{data["partial"]} letter is in the wrong '
+                                 +'spot. ')
+            elif data['partial'] != 0:
+                feedback_str += (f'{data["partial"]} letters are in the wrong '
+                                +'spots. ')
+            if data['partial'] + data['perfect'] == 3:
+                feedback_str += '1 letter does not exist in the secret word.'
+            elif data['partial'] + data['perfect'] < 3:
+                feedback_str += (f'{4 - data["partial"] - data["perfect"]} '
+                                +'letters do not exist in the secret word')
     print(feedback_str)
 
 # Display game history to user
@@ -64,18 +70,30 @@ def show_game_history():
     print(' ')
     print(' #    Word    Result     Summary')
     print(' -    ----    ------     ----------------------------')
-    for key, value in game_history.items():
-        result = ' Win  ' if value['win'] else ' Loss '
-        print(f' {key}    {value["word"]}    {result}     { value["summary"]}')
+    if len(list(game_history.keys())) == 0:
+        print(' ')
+        print(' No game history data. Play a game to register scores!')
+    else:
+        for key, value in game_history.items():
+            result = ' Win  ' if value['win'] else ' Loss '
+            print(f' {key}    {value["word"]}    {result}     '
+                  +'{ value["summary"]}')
     print(' ')
 
 # Provide information on how to play the game
 def show_help():
     os.system('cls')
-    print(' ')
-    print(' ')
+    print('The goal of this game is to try and guess a randomly generated, '
+          +'4-letter word within the')
+    print('first 10 guesses. After every guess, you will receive feedback '
+          +' letting you know how')
+    print('close you are to the secret word. While playing the game, you can '
+          +'enter "?" to see what')
+    print('letters you have already guessed. To start, enter "1" from the '
+          +'options menu. You can')
+    print('view your scores by entering "2" from  the options menu. Good luck!')
+    print(' ')                
 
-                                              
 # Play 1 round of the game
 def play_game():
     os.system('cls')
@@ -83,7 +101,8 @@ def play_game():
     game = Game(word_list)
     # game.print_secret_word()
     while game.is_ongoing():
-        guess = input(f'[Guess #{game.current_guess()}] Enter a four letter word: ')
+        guess = input(f'[Guess #{game.current_guess()}] Enter a four letter '
+                      +'word: ')
         if game.validate(guess, word_list):
             feedback = game.evaluate(guess)
             if game.is_ongoing():
