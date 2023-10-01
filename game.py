@@ -75,14 +75,15 @@ class Game:
         if perfect_match_count == 4:
             self.won_game = True
             self.__print_win()
-            return self.__secret_word
+            return ''.join(self.__secret_word)
         
         # If the guess limit has been reached, reveal word and let user know
         # they lost
         if len(self.guesses) >= Game.GUESS_LIMIT:
             self.__print_lose()
-            print(f'The secret word was {self.__secret_word}')
-            return self.__secret_word
+            print(f'------------------ The secret word was "'
+                  +f'{"".join(self.__secret_word).upper()}" ------------------')
+            return ''.join(self.__secret_word)
         
         # Return match feedback as dictionary
         feedback={'perfect': perfect_match_count, 'partial':partial_match_count}
@@ -106,7 +107,6 @@ class Game:
         print('  ╚██╔╝  ██║   ██║██║   ██║    ██║███╗██║██║██║╚██╗██║    ╚═╝')
         print('   ██║   ╚██████╔╝╚██████╔╝    ╚███╔███╔╝██║██║ ╚████║    ██╗')
         print('   ╚═╝    ╚═════╝  ╚═════╝      ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝    ╚═╝')
-        print(' ') 
 
     def __print_lose(self):
         print(' ')
@@ -122,7 +122,6 @@ class Game:
               +'█╗██║  ██║')
         print(' ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚═════'
               +'═╝╚═╝  ╚═╝')
-        print(' ') 
 
 
 

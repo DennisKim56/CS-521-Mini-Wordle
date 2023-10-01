@@ -63,19 +63,17 @@ def show_game_history():
     print('╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝')
     print(' ')
     print(' #    Word    Result     Summary')
-    print(' -    ----    ------     ------------------------------------------')
+    print(' -    ----    ------     ----------------------------')
     for key, value in game_history.items():
-        word = str(value['word'])
-        result = ' Win ' if value['win'] else ' Lost '
-        summary = value['summary']
-        print(f' {key}    {word}    {result}    {summary}')
+        result = ' Win  ' if value['win'] else ' Loss '
+        print(f' {key}    {value["word"]}    {result}     { value["summary"]}')
+    print(' ')
 
 # Provide information on how to play the game
 def show_help():
     os.system('cls')
-
-
-
+    print(' ')
+    print(' ')
 
                                               
 # Play 1 round of the game
@@ -92,10 +90,12 @@ def play_game():
                 print_feedback(feedback)
             else:
                 index = len(list(game_history.keys())) + 1
-                game_history[index] = {'word':feedback, 
+                game_history[index] = {'word':feedback.upper(), 
                                        'win':bool(game), 
                                        'summary':str(game)}
+    print(' ')
 
+# Main application driver 
 while not exit_game:
     print('1. Play a new game')
     print('2. See scores')
