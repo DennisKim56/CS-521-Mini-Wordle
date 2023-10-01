@@ -38,14 +38,18 @@ class Game:
         elif not guess.isalpha():
             print('--> Error: Guesses may only contain letters. Please try '
                   +'another guess.')
+            return False
         elif len(guess) != 4:
             print('--> Error: You may only guess 4-letter words. '
                   +'Please try another word.')
+            return False
         elif guess.lower() in self.guesses:
             print('--> Error: You have already guessed this word. Please try '
                   +'another word.')
+            return False
         elif guess.lower() not in word_list:
             print('--> Error: Word not recognized. Please try another word.')
+            return False
         else:
             self.guesses.add(guess)
             self.guessed_letters.update(set(guess))
@@ -127,10 +131,3 @@ class Game:
               +'█╗██║  ██║')
         print(' ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚═════'
               +'═╝╚═╝  ╚═╝')
-
-
-
-
-
-
-
