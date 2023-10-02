@@ -77,7 +77,7 @@ def show_game_history():
         for key, value in game_history.items():
             result = ' Win  ' if value['win'] else ' Loss '
             print(f' {key}    {value["word"]}    {result}     '
-                  +'{ value["summary"]}')
+                  +f'{ value["summary"]}')
     print(' ')
 
 # Provide information on how to play the game
