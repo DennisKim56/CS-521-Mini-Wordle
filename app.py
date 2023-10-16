@@ -29,8 +29,8 @@ print('Welcome to Miniwordle!')
 game_history = dict()
 exit_game = False
 
-# Based on feedback dictionary, format feedback response for user
 def print_feedback(data):
+    ''' Based on feedback dictionary, format feedback response for user '''
     if type(data) is str:
         feedback_str = data
     else:
@@ -57,8 +57,8 @@ def print_feedback(data):
                                 +'letters do not exist in the secret word')
     print(feedback_str)
 
-# Display game history to user
 def show_game_history():
+    ''' Formats and displays score history '''
     os.system('cls')
     print(' ')
     print('███████╗ ██████╗ ██████╗ ██████╗ ███████╗███████╗')
@@ -80,8 +80,8 @@ def show_game_history():
                   +f'{ value["summary"]}')
     print(' ')
 
-# Provide information on how to play the game
 def show_help():
+    ''' Provide information on how to play the game '''
     os.system('cls')
     print('The goal of this game is to try and guess a randomly generated, '
           +'4-letter word within the')
@@ -94,8 +94,8 @@ def show_help():
     print('view your scores by entering "2" from  the options menu. Good luck!')
     print(' ')                
 
-# Play 1 round of the game
 def play_game():
+    ''' Initializes game class and plays 1 game '''
     os.system('cls')
     # Initialize game object
     game = Game(word_list)
@@ -103,7 +103,7 @@ def play_game():
     while game.is_ongoing():
         guess = input(f'[Guess #{game.current_guess()}] Enter a four letter '
                       +'word: ')
-        if game.validate(guess, word_list):
+        if game.validate(guess):
             feedback = game.evaluate(guess)
             if game.is_ongoing():
                 print_feedback(feedback)
@@ -114,8 +114,8 @@ def play_game():
                                        'summary':str(game)}
     print(' ')
 
-# Main application driver 
 while not exit_game:
+    ''' Persists game session across game instances '''
     print('1. Play a new game')
     print('2. See scores')
     print('3. Help')
